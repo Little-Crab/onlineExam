@@ -172,5 +172,7 @@ public class AdminDaoTest {
         System.out.println(question);
         int i = questionService.create(question);
         System.out.println("xxxxxxxx");
+        System.out.println("xxxxxxxx");
+        System.out.println("xxxxxxxx");
     }
 }
