@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crab.dao.DepartmentDao">
+
+	<resultMap type="com.crab.entity.Department" id="Department">
+
+		<id column="dept_id"  property="deptId"/>
+		<result column="dept_name"  property="deptName"/>
+	</resultMap>
+
+	<insert id="create" keyProperty="id" useGeneratedKeys="true" parameterType="com.crab.entity.Department">
+		insert into department(
+			dept_id,
+			dept_name
+		)values(
+			#{deptId},
+			#{deptName}
+		)
+	</insert>
+
+	<select id="query" resultMap="Department">
+		select * from department
+		<include refid="DepartmentFindCriteria"/>
+	</select>
+
+	<select id="count" resultType="int">
+		select count(1) from department
+		<include refid="DepartmentFindCriteria"/>
+	</select>
+
+	<select id="detail" resultMap="Department">
+		select * from department where dept_id = #{deptId}
+	</select>
+
+	<delete id="delete">
+		delete from department where dept_id = #{deptId}
+	</delete>
+	<update id="update">
+		update department set
+			dept_id=#{deptId},
+			dept_name=#{deptName}
+		where dept_id = #{deptId}
+	</update>
+
+	<sql id="DepartmentFindCriteria">
+		<where>
+			<if test="deptId != null">and dept_id = #{deptId}</if>
+			<if test="deptName != null and deptName != ''">and dept_name = #{deptName}</if>
+		</where>
+	</sql>
+
+</mapper>

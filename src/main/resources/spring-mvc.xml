@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans.xsd
+                http://www.springframework.org/schema/context
+                http://www.springframework.org/schema/context/spring-context.xsd
+                http://www.springframework.org/schema/mvc
+                http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!--    注解扫描开启，只扫描controller包内Java文件-->
+    <context:component-scan base-package="com.crab.controller"/>
+    <!--    设定一个字符集，使返回的汉字可以正常显示，非乱码-->
+    <bean id="charset" class="java.nio.charset.Charset" factory-method="lookup">
+        <constructor-arg value="UTF-8"/>
+    </bean>
+    <!--日期转换器 FormattingConversionServiceFactoryBean -->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.crab.utils.DateConvert"/>
+            </set>
+        </property>
+    </bean>
+    <!--    配置视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--放开静态界面-->
+    <mvc:default-servlet-handler/>
+    <!--    配置类型转换-->
+    <mvc:annotation-driven conversion-service="conversionService">
+        <mvc:message-converters>
+            <!--字符串转换器-->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <!--<constructor-arg name="defaultCharset" value="utf-8"/>-->
+                <constructor-arg name="defaultCharset" ref="charset"/>
+            </bean>
+            <!--映射对象转换器，将传入的时间字符串转换为可用的 date日期数据，从而可以正确的传入数据库中-->
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                    <bean class="com.fasterxml.jackson.databind.ObjectMapper">
+                        <property name="dateFormat">
+                            <bean class="java.text.SimpleDateFormat">
+                                <constructor-arg type="java.lang.String" value="yyyy-MM-dd"/>
+                            </bean>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <!--文件上传-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"/>
+        <property name="maxUploadSize" value="20971520"/>
+    </bean>
+</beans>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crab.dao.CourseDao">
+
+	<resultMap type="com.crab.entity.Course" id="Course">
+		<id column="id" property="id"/>
+		<result column="course_id"  property="courseId"/>
+		<result column="course_name"  property="courseName"/>
+		<result column="class_id"  property="classId"/>
+		<result column="teacher_id"  property="teacherId"/>
+	</resultMap>
+
+	<insert id="create" keyProperty="id" useGeneratedKeys="true" parameterType="com.crab.entity.Course">
+		insert into course(
+			course_id,
+			course_name,
+			class_id,
+			teacher_id
+		)values(
+			#{courseId},
+			#{courseName},
+			#{classId},
+			#{teacherId}
+		)
+	</insert>
+
+	<select id="query" resultMap="Course">
+		select * from course
+		<include refid="CourseFindCriteria"/>
+	</select>
+
+	<select id="count" resultType="int">
+		select count(1) from course
+		<include refid="CourseFindCriteria"/>
+	</select>
+
+	<select id="detail" resultMap="Course">
+		select * from course where id = #{id}
+	</select>
+
+	<delete id="delete">
+		delete from course where id = #{id}
+	</delete>
+	<update id="update">
+		update course set
+			course_id=#{courseId},
+			course_name=#{courseName},
+			class_id=#{classId},
+			teacher_id=#{teacherId}
+		where id = #{id}
+	</update>
+
+	<sql id="CourseFindCriteria">
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="courseId != null">and course_id = #{courseId}</if>
+			<if test="courseName != null and courseName != ''">and course_name = #{courseName}</if>
+			<if test="classId != null">and class_id = #{classId}</if>
+			<if test="teacherId != null and teacherId != ''">and teacher_id = #{teacherId}</if>
+		</where>
+	</sql>
+
+</mapper>

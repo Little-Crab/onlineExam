@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crab.dao.AdminDao">
+
+    <resultMap type="com.crab.entity.Admin" id="Admin">
+        <id column="id" property="id"/>
+        <result column="password" property="password"/>
+        <result column="grade" property="grade"/>
+        <result column="major_id" property="majorId"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="birthday" property="birthday"/>
+        <result column="idcard" property="idcard"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="class_id" property="classId"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="head_img" property="headImg"/>
+        <result column="identitytype" property="identitytype"/>
+    </resultMap>
+
+    <insert id="create" keyProperty="id" useGeneratedKeys="true" parameterType="com.crab.entity.Admin">
+        insert into admin(id,
+                          password,
+                          grade,
+                          major_id,
+                          name,
+                          sex,
+                          age,
+                          birthday,
+                          idcard,
+                          phone,
+                          email,
+                          class_id,
+                          dept_id,
+                          head_img,
+                          identitytype)
+        values (#{id},
+                #{password},
+                #{grade},
+                #{majorId},
+                #{name},
+                #{sex},
+                #{age},
+                #{birthday},
+                #{idcard},
+                #{phone},
+                #{email},
+                #{classId},
+                #{deptId},
+                #{headImg},
+                #{identitytype})
+    </insert>
+
+    <select id="query" resultMap="Admin">
+        select * from admin
+        <include refid="AdminFindCriteria"/>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(1) from admin
+        <include refid="AdminFindCriteria"/>
+    </select>
+
+    <select id="detail" resultMap="Admin">
+        select * from admin
+        <include refid="AdminFindCriteria"/>
+    </select>
+
+    <delete id="delete">
+        delete
+        from admin
+        where id = #{id}
+    </delete>
+    <update id="update">
+        update admin
+        set id=#{id},
+            password=#{password},
+            grade=#{grade},
+            major_id=#{majorId},
+            name=#{name},
+            sex=#{sex},
+            age=#{age},
+            birthday=#{birthday},
+            idcard=#{idcard},
+            phone=#{phone},
+            email=#{email},
+            class_id=#{classId},
+            dept_id=#{deptId},
+            head_img=#{headImg},
+            identitytype=#{identitytype}
+        where id = #{id}
+    </update>
+
+    <sql id="AdminFindCriteria">
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="password != null and password != ''">and password = #{password}</if>
+            <if test="grade != null">and grade = #{grade}</if>
+            <if test="majorId != null">and major_id = #{majorId}</if>
+            <if test="name != null and name != ''">and name = #{name}</if>
+            <if test="sex != null">and sex = #{sex}</if>
+            <if test="age != null">and age = #{age}</if>
+            <if test="idcard != null and idcard != ''">and idcard = #{idcard}</if>
+            <if test="phone != null and phone != ''">and phone = #{phone}</if>
+            <if test="email != null and email != ''">and email = #{email}</if>
+            <if test="classId != null">and class_id = #{classId}</if>
+            <if test="deptId != null">and dept_id = #{deptId}</if>
+            <if test="headImg != null and headImg != ''">and head_img = #{headImg}</if>
+            <if test="identitytype != null ">and identitytype = #{identitytype}</if>
+        </where>
+    </sql>
+
+</mapper>

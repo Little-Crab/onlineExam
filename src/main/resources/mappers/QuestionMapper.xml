@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crab.dao.QuestionDao">
+
+    <resultMap type="com.crab.entity.Question" id="Question">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="remark" property="remark"/>
+        <result column="type" property="type"/>
+        <result column="score" property="score"/>
+        <result column="creator" property="creator"/>
+        <result column="create_time" property="createTime"/>
+        <result column="exam_id" property="examId"/>
+    </resultMap>
+
+    <insert id="create" keyProperty="id" useGeneratedKeys="true" parameterType="com.crab.entity.Question">
+        insert into question(title,
+                             remark,
+                             type,
+                             score,
+                             creator,
+                             create_time,
+                             exam_id)
+        values (#{title},
+                #{remark},
+                #{type},
+                #{score},
+                #{creator},
+                now(),
+                #{examId})
+    </insert>
+
+    <select id="query" resultMap="Question">
+        select * from question
+        <include refid="QuestionFindCriteria"/>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(1) from question
+        <include refid="QuestionFindCriteria"/>
+    </select>
+
+    <select id="detail" resultMap="Question">
+        select *
+        from question
+        where id = #{id}
+    </select>
+
+    <delete id="delete">
+        delete
+        from question
+        where id = #{id}
+    </delete>
+    <update id="update">
+        update question
+        <include refid="QuestionUpdateCriteria"/>
+        where id=#{id}
+    </update>
+
+    <sql id="QuestionFindCriteria">
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="title != null and title != ''">and title = #{title}</if>
+            <if test="remark != null and remark != ''">and remark = #{remark}</if>
+            <if test="type != null">and type = #{type}</if>
+            <if test="score != null">and score = #{score}</if>
+            <if test="creator != null">and creator = #{creator}</if>
+            <if test="examId != null">and exam_id = #{examId}</if>
+        </where>
+    </sql>
+    <sql id="QuestionUpdateCriteria">
+        <set>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="creator != null">creator = #{creator},</if>
+            <if test="examId != null">exam_id = #{examId},</if>
+        </set>
+    </sql>
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crab.dao.MajorDao">
+
+    <resultMap type="com.crab.entity.Major" id="Major">
+        <id column="major_id" property="majorId"/>
+        <result column="major_name" property="majorName"/>
+        <result column="dept_id" property="deptId"/>
+    </resultMap>
+
+    <insert id="create" keyProperty="id" useGeneratedKeys="true" parameterType="com.crab.entity.Major">
+        insert into major(major_id,
+                          major_name, dept_id)
+        values (#{majorId},
+                #{majorName}, #{deptId})
+    </insert>
+
+    <select id="query" resultMap="Major">
+        select * from major
+        <include refid="MajorFindCriteria"/>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(1) from major
+        <include refid="MajorFindCriteria"/>
+    </select>
+
+    <select id="detail" resultMap="Major">
+        select *
+        from major
+        where major_id = #{majorId}
+    </select>
+
+    <delete id="delete">
+        delete
+        from major
+        where major_id = #{majorId}
+    </delete>
+    <update id="update">
+        update major
+        set major_id=#{majorId},
+            major_name=#{majorName},
+            dept_id=#{deptId}
+        where major_id = #{majorId}
+    </update>
+
+    <sql id="MajorFindCriteria">
+        <where>
+            <if test="majorId != null">and major_id = #{majorId}</if>
+            <if test="majorName != null and majorName != ''">and major_name = #{majorName}</if>
+            <if test="deptId != null and deptId != ''">and dept_id = #{deptId}</if>
+        </where>
+    </sql>
+
+</mapper>

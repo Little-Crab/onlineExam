@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crab.dao.ExamDao">
+
+    <resultMap type="com.crab.entity.Exam" id="Exam">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="remark" property="remark"/>
+        <result column="state" property="state"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="exam_length" property="examLength"/>
+        <result column="url" property="url"/>
+    </resultMap>
+
+    <insert id="create" keyProperty="id" useGeneratedKeys="true" parameterType="com.crab.entity.Exam">
+        insert into exam(title,
+                         remark,
+                         state,
+                         start_time,
+                         end_time,
+                         exam_length, url)
+        values (#{title},
+                #{remark},
+                #{state},
+                #{startTime},
+                #{endTime},
+                #{examLength}, #{url})
+    </insert>
+
+    <select id="query" resultMap="Exam">
+        select * from exam
+        <include refid="ExamFindCriteria"/>
+    </select>
+    <select id="queryByState" parameterType="string" resultType="int">
+			<![CDATA[
+        select id
+        from exam
+        where start_time <= now()
+          and end_time > now()
+          and state = #{_parameter}
+        ]]>
+	</select>
+    <select id="queryByStateForExec" parameterType="string" resultType="int">
+		<![CDATA[
+        select *
+        from exam
+        where end_time < now()
+          and state = #{_parameter}
+        ]]>
+	</select>
+
+    <select id="count" resultType="int">
+        select count(1) from exam
+        <include refid="ExamFindCriteria"/>
+    </select>
+
+    <select id="detail" resultMap="Exam">
+        select *
+        from exam
+        where id = #{id}
+    </select>
+
+    <delete id="delete">
+        delete
+        from exam
+        where id = #{id}
+    </delete>
+    <update id="update">
+        update exam
+        <include refid="ExamUpdateCriteria"></include>
+        where id = #{id}
+    </update>
+
+    <sql id="ExamFindCriteria">
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="title != null and title != ''">and title = #{title}</if>
+            <if test="remark != null and remark != ''">and remark = #{remark}</if>
+            <if test="state != null and state != ''">and state = #{state}</if>
+            <if test="examLength != null and examLength != ''">and exam_length = #{examLength}</if>
+            <if test="url != null and url != ''">and url = #{url}</if>
+        </where>
+    </sql>
+    <sql id="ExamUpdateCriteria">
+        <set>
+            <if test="id != null">id = #{id},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="state != null and state != ''">state = #{state},</if>
+            <if test="examLength != null and examLength != ''">exam_length = #{examLength},</if>
+            <if test="url != null and url != ''">url = #{url},</if>
+        </set>
+    </sql>
+</mapper>

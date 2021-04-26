@@ -1,0 +1,33 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": ""
+  },
+  "logoInfo": {
+    "title": "LITTLE CRAB",
+    "image": "static/images/logo.png ",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "常规管理",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "课程管理",
+          "href": "course/list",
+          "icon": "fa fa-home",
+          "target": "_self"
+        },
+        {
+          "title": "试卷管理",
+          "href": "exam/list",
+          "icon": "fa fa-home",
+          "target": "_self"
+        }
+      ]
+    }
+  ]
+}

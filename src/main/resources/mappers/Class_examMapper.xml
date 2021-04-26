@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crab.dao.Class_examDao">
+
+	<resultMap type="com.crab.entity.Class_exam" id="Class">
+		<id column="id" property="id"/>
+		<result column="class_id"  property="classId"/>
+		<result column="class_name"  property="className"/>
+	</resultMap>
+
+	<insert id="create" keyProperty="id" useGeneratedKeys="true" parameterType="com.crab.entity.Class_exam">
+		insert into class(
+			class_id,
+			class_name
+		)values(
+			#{classId},
+			#{className}
+		)
+	</insert>
+
+	<select id="query" resultMap="Class">
+		select * from class
+		<include refid="ClassFindCriteria"/>
+	</select>
+
+	<select id="count" resultType="int">
+		select count(1) from class
+		<include refid="ClassFindCriteria"/>
+	</select>
+
+	<select id="detail" resultMap="Class">
+		select * from class where class_id = #{id}
+	</select>
+
+	<delete id="delete">
+		delete from class where class_id = #{id}
+	</delete>
+	<update id="update">
+		update class set
+			class_id=#{classId},
+			class_name=#{className}
+		where class_id = #{id}
+	</update>
+
+	<sql id="ClassFindCriteria">
+		<where>
+			<if test="classId != null">and class_id = #{classId}</if>
+			<if test="className != null and className != ''">and class_name = #{className}</if>
+		</where>
+	</sql>
+
+</mapper>
